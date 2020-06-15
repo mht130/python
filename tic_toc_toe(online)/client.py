@@ -5,8 +5,8 @@ import os
 import threading
 
 #user switch check
-if len(sys.argv)<3:
-    print("usage : python client.py portno player_name")
+if len(sys.argv)<2:
+    print("usage : python client.py portno")
     sys.exit()
 
 #Primary definitaions
@@ -14,7 +14,6 @@ FORMAT="utf-8"
 # ip='192.168.43.164'
 ip='192.168.1.103'
 port=int(sys.argv[1])
-player_name=sys.argv[2]
 disconnect_msg="#!disconnect"
 n='0123456789'
 s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
@@ -31,7 +30,7 @@ except:
 
 
 #draw board
-def board(n,turn=0):
+def board(n,ch):
     os.system("clear")
     print(f"       |     |     ")
     print(f"    {n[1]}  |  {n[2]}  |  {n[3]}  ")
@@ -41,12 +40,15 @@ def board(n,turn=0):
     print(f"  _________________")
     print(f"    {n[7]}  |  {n[8]}  |  {n[9]}   ")
     print(f"       |     |      ")
+    print(f"                             You are {ch}      ")
+    print()
 
 
-board(n)
+board(n,'-')
 
 
-def reciver():
+def reciver(ch):
+    global running
     while running:
         try:
             res=s.recv(64).decode(FORMAT)
@@ -54,8 +56,12 @@ def reciver():
                 break
             elif res[:3]=="Err":
                 print(res)
+            elif res[0:12]=='Game is over':
+                print(res)
+                running=False
+                break
             else:
-                print("ok : "+res)
+                board(res,ch)
         except:
             pass
 
@@ -64,16 +70,17 @@ def reciver():
 
 # connected msg
 msg=s.recv(64).decode(FORMAT)
+ch=msg[::-1][0]
 print(msg)
-if msg=='Waiting for 2nd player your number is 1':
+if msg=='Waiting for 2nd player your number is 1 and you are #':
     #number 2 connected
     msg=s.recv(64).decode(FORMAT)
     print(msg)
 
-thread=threading.Thread(target=reciver)
+thread=threading.Thread(target=reciver,args=(ch))
 thread.start()
 #main loop
-while True:
+while running:
     try:
         msg=input("")
         if msg.isnumeric():
