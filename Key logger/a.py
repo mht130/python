@@ -3,7 +3,7 @@ import datetime
 import time
 
 
-while(True):
+while True :
     keyboard.start_recording()
     time.sleep(5)
     a=keyboard.stop_recording()

@@ -4,7 +4,7 @@ import sys
 from termcolor import colored
 
 # port=5050
-# server_addr="192.168.1.103"
+#server_addr="192.168.43.164"
 FORMAT="utf-8"
 header=64
 disconnect_msg="!disconnect"

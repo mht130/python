@@ -11,13 +11,15 @@ if len(sys.argv)<2:
 
 #Primary definitaions
 FORMAT="utf-8"
-# ip='192.168.43.164'
-ip='192.168.1.103'
+#ip='192.168.43.164'
+ip='192.168.1.104'
 port=int(sys.argv[1])
 disconnect_msg="#!disconnect"
 n='0123456789'
 s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
 running=True
+
+
 # try to connect to server
 try:
     s.connect((ip,port))
@@ -42,7 +44,6 @@ def board(n,ch):
     print(f"       |     |      ")
     print(f"                             You are {ch}      ")
     print()
-
 
 board(n,'-')
 
@@ -76,6 +77,8 @@ if msg=='Waiting for 2nd player your number is 1 and you are #':
     #number 2 connected
     msg=s.recv(64).decode(FORMAT)
     print(msg)
+
+
 
 thread=threading.Thread(target=reciver,args=(ch))
 thread.start()

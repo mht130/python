@@ -44,7 +44,6 @@ def handle_user(conn,addr,player_number,conn2):
             msg=conn.recv(64).decode(FORMAT)
             turn=i%2
             turn+=1
-            # try:
             if msg!=disconnect_msg:
                 if is_valid(msg):
                     if turn==player_number:
